@@ -13,18 +13,25 @@
     <link rel="manifest" href="manifest.json">
     <style>
         :root {
-            /* Design System Tokens */
-            --bg-color: #111111;
-            --text-primary: #F9F9F9;
-            --text-secondary: #AAAAAA;
-            --border-color: #333333;
-            --surface-color: #1A1A1A;
+            /* Design System Tokens - Enhanced Premium Palette */
+            --bg-color: #080808;
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --surface-color: rgba(30, 30, 30, 0.4); /* For Glassmorphism */
             --primary-action: #2A5A3B;
-            --primary-hover: #357049;
-            --radius-md: 12px;
-            --radius-lg: 16px;
+            --primary-hover: #3d8255;
+            --accent-glow: rgba(42, 90, 57, 0.4);
+            --radius-md: 16px;
+            --radius-lg: 24px;
             --radius-full: 9999px;
             --font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes meshGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         * {
@@ -36,23 +43,26 @@
 
         body {
             background-color: var(--bg-color);
+            /* Animated Mesh Background */
+            background: radial-gradient(circle at 50% 50%, #1a2a1f 0%, #080808 100%);
+            background-size: 200% 200%;
+            animation: meshGradient 10s ease infinite;
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            /* Mobile constraint for desktop viewing */
             align-items: flex-start;
+            overflow-x: hidden;
         }
 
         .app-container {
             width: 100%;
-            max-width: 480px; /* Mobile width constraint */
+            max-width: 480px;
             min-height: 100vh;
-            background-color: var(--bg-color);
+            background: transparent;
             position: relative;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
             overflow-x: hidden;
         }
 
@@ -61,11 +71,12 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px;
+            padding: 24px 20px;
             position: sticky;
             top: 0;
-            background-color: rgba(17, 17, 17, 0.95);
-            backdrop-filter: blur(10px);
+            background-color: rgba(8, 8, 8, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 10;
             border-bottom: 1px solid var(--border-color);
         }
@@ -120,12 +131,21 @@
         /* --- Order Summary Card --- */
         .order-card {
             background-color: var(--surface-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-radius: var(--radius-lg);
-            padding: 16px;
+            padding: 20px;
             display: flex;
             gap: 16px;
             align-items: center;
             border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .order-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .thumbnail {
@@ -288,27 +308,31 @@
 
         .btn-primary {
             width: 100%;
-            padding: 18px; /* Larger as requested */
+            padding: 20px;
             border-radius: var(--radius-full);
             border: none;
-            background-color: var(--primary-action);
+            background: linear-gradient(135deg, var(--primary-action) 0%, #1e422c 100%);
             color: #fff;
-            font-weight: 600;
-            font-size: 1.1rem;
+            font-weight: 700;
+            font-size: 1.15rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            transition: background-color 0.2s, transform 0.1s;
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 20px var(--accent-glow);
+            letter-spacing: 0.5px;
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px var(--accent-glow);
+            filter: brightness(1.1);
         }
         
         .btn-primary:active {
-            transform: scale(0.98);
+            transform: scale(0.97) translateY(0);
         }
 
         .trust-badges {
