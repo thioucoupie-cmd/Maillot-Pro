@@ -369,6 +369,207 @@
             font-size: 1.1rem;
         }
 
+        /* --- AI Assistant --- */
+        .ai-fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: var(--primary-action);
+            border: 2px solid var(--border-color);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            z-index: 100;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .ai-fab:hover {
+            transform: scale(1.05);
+            background-color: var(--primary-hover);
+        }
+
+        .ai-chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 24px;
+            width: 320px;
+            height: 480px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            z-index: 99;
+            transform-origin: bottom right;
+            transition: opacity 0.3s, transform 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        .ai-chat-window.open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        .ai-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: rgba(17, 17, 17, 0.5);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .ai-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary-action), #111);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .ai-header-info {
+            flex-grow: 1;
+        }
+
+        .ai-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .ai-status {
+            font-size: 0.75rem;
+            color: var(--primary-action);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .ai-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-action);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .ai-messages {
+            flex-grow: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        /* Custom scrollbar for chat */
+        .ai-messages::-webkit-scrollbar { width: 4px; }
+        .ai-messages::-webkit-scrollbar-track { background: transparent; }
+        .ai-messages::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+        .ai-msg {
+            max-width: 85%;
+            padding: 12px 14px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            animation: fadeInMsg 0.3s ease-out;
+        }
+
+        @keyframes fadeInMsg {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ai-msg.system {
+            background-color: #222;
+            color: var(--text-primary);
+            border-radius: 12px 12px 12px 2px;
+            align-self: flex-start;
+            border: 1px solid var(--border-color);
+        }
+
+        .ai-msg.user {
+            background-color: var(--primary-action);
+            color: #fff;
+            border-radius: 12px 12px 2px 12px;
+            align-self: flex-end;
+        }
+        
+        .ai-suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        
+        .ai-chip {
+            background-color: transparent;
+            border: 1px solid var(--primary-action);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .ai-chip:hover {
+            background-color: rgba(42, 90, 59, 0.2);
+        }
+
+        .ai-input-area {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+        }
+
+        .ai-input {
+            flex-grow: 1;
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .ai-input:focus {
+            border-color: var(--primary-action);
+        }
+
+        .ai-send-btn {
+            background: none;
+            border: none;
+            color: var(--primary-action);
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        
+        .ai-send-btn:hover {
+            transform: translateX(2px) scale(1.1);
+        }
+
         /* Utility classes */
         .hidden { display: none !important; }
     </style>
@@ -512,6 +713,41 @@
                 <span>Mastercard</span>
             </div>
         </div>
+        
+        <!-- AI ASSISTANT -->
+        <button class="ai-fab" id="ai-fab">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="m8 10 3 3 6-6"/></svg>
+        </button>
+
+        <div class="ai-chat-window" id="ai-window">
+            <div class="ai-header">
+                <div class="ai-avatar">MP</div>
+                <div class="ai-header-info">
+                    <div class="ai-title">Maillot Pro Coach</div>
+                    <div class="ai-status">En ligne</div>
+                </div>
+                <button class="back-btn" id="close-ai" style="padding: 4px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            
+            <div class="ai-messages" id="ai-messages">
+                <div class="ai-msg system">
+                    Bonjour ! Je suis votre conseiller Maillot Pro. Êtes-vous sûr(e) de votre choix pour le Maillot Elite Édition (Blanc/Or) ?
+                    <div class="ai-suggestion-chips" id="initial-chips">
+                        <button class="ai-chip" onclick="handleAiOption('Oui, la taille M me va.')">Oui, la taille M me va.</button>
+                        <button class="ai-chip" onclick="handleAiOption('Comment taille ce maillot ?')">Comment taille ce maillot ?</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ai-input-area">
+                <input type="text" id="ai-input" class="ai-input" placeholder="Posez une question...">
+                <button class="ai-send-btn" id="ai-send">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+            </div>
+        </div>
 
     </div>
 
@@ -592,6 +828,79 @@
                 if(currentView === 'checkout') {
                     alert("Going back to cart!");
                 }
+            });
+            
+            // --- AI Assistant Logic ---
+            const aiFab = document.getElementById('ai-fab');
+            const aiWindow = document.getElementById('ai-window');
+            const closeAi = document.getElementById('close-ai');
+            const aiInput = document.getElementById('ai-input');
+            const aiSendBtn = document.getElementById('ai-send');
+            const aiMessages = document.getElementById('ai-messages');
+            
+            aiFab.addEventListener('click', () => {
+                aiWindow.classList.add('open');
+            });
+            
+            closeAi.addEventListener('click', () => {
+                aiWindow.classList.remove('open');
+            });
+            
+            function appendUserMessage(text) {
+                const msg = document.createElement('div');
+                msg.className = 'ai-msg user';
+                msg.textContent = text;
+                aiMessages.appendChild(msg);
+                scooldownToBottom();
+                
+                // Remove initial chips if they exist
+                const initialChips = document.getElementById('initial-chips');
+                if(initialChips) initialChips.remove();
+            }
+            
+            function appendSystemMessage(text, delay = 600) {
+                setTimeout(() => {
+                    const msg = document.createElement('div');
+                    msg.className = 'ai-msg system';
+                    msg.innerHTML = text; // Allow HTML for bolding/chips
+                    aiMessages.appendChild(msg);
+                    scooldownToBottom();
+                }, delay);
+            }
+            
+            function scooldownToBottom() {
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+            }
+            
+            // Expose function globally for the inline onclick handlers
+            window.handleAiOption = function(text) {
+                appendUserMessage(text);
+                
+                if (text.includes('taille ce maillot')) {
+                    appendSystemMessage("Le Maillot Elite a une **coupe cintrée (Pro Fit)**. Si vous préférez être à l'aise, nous conseillons de prendre une taille au-dessus. Voulez-vous que je modifie la taille en **Large** pour vous ?<br><br><div class='ai-suggestion-chips'><button class='ai-chip' onclick='handleAiOption(\"Oui, passez en Large.\")'>Oui, passez en Large.</button></div>");
+                } else if (text.includes('Large')) {
+                    // Update UI to reflect Large
+                    document.querySelector('.product-meta').textContent = "Size: Large | Color: White/Gold";
+                    appendSystemMessage("C'est noté ! J'ai mis à jour votre panier avec la taille **Large**. Il ne vous reste plus qu'à finaliser le paiement sur l'écran principal. ⚽");
+                } else {
+                    appendSystemMessage("Parfait. Vos articles sont réservés pour les 10 prochaines minutes. Vous pouvez procéder au paiement en toute sécurité !");
+                }
+            };
+
+            function handleAiSubmit() {
+                const text = aiInput.value.trim();
+                if(!text) return;
+                
+                appendUserMessage(text);
+                aiInput.value = '';
+                
+                // Generic mock response
+                appendSystemMessage("Je suis là pour vous aider avec votre commande. Si vous avez un doute sur la matière ou la livraison, n'hésitez pas ! La livraison express est actuellement offerte.");
+            }
+            
+            aiSendBtn.addEventListener('click', handleAiSubmit);
+            aiInput.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') handleAiSubmit();
             });
         });
     </script>
