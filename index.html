@@ -1,1043 +1,381 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maillot Pro - Checkout</title>
+    <title>Maillot Pro - Marketplace Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- PWA & Mobile Meta -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#111111">
-    <link rel="apple-touch-icon" href="https://via.placeholder.com/192/2A5A3B/FFFFFF?text=MP">
-    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2a5a3b",
+                        "primary-hover": "#3d8255",
+                        "background-dark": "#080808",
+                        "surface-dark": "#1a1a1a",
+                        "off-white": "#f5f5f5",
+                        "light-gray": "#a1a1aa"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "12px",
+                        "lg": "20px",
+                        "xl": "24px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
     <style>
-        :root {
-            /* Design System Tokens - Enhanced Premium Palette */
-            --bg-color: #080808;
-            --text-primary: #FFFFFF;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --surface-color: rgba(30, 30, 30, 0.4); /* For Glassmorphism */
-            --primary-action: #2A5A3B;
-            --primary-hover: #3d8255;
-            --accent-glow: rgba(42, 90, 57, 0.4);
-            --radius-md: 16px;
-            --radius-lg: 24px;
-            --radius-full: 9999px;
-            --font-family: 'Inter', sans-serif;
-        }
-
-        @keyframes meshGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: var(--font-family);
-        }
-
-        body {
-            background-color: var(--bg-color);
-            /* Animated Mesh Background */
-            background: radial-gradient(circle at 50% 50%, #1a2a1f 0%, #080808 100%);
-            background-size: 200% 200%;
-            animation: meshGradient 10s ease infinite;
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            overflow-x: hidden;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
-            background: transparent;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        /* --- Header --- */
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 24px 20px;
-            position: sticky;
-            top: 0;
-            background-color: rgba(8, 8, 8, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 10;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .back-btn {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            cursor: pointer;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo {
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
-        }
-
-        .secure-icon {
-            color: var(--text-secondary);
-        }
-
-        /* --- Main Content --- */
-        main {
-            padding: 24px 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 28px;
-        }
-
-        /* --- Screens --- */
-        .screen {
-            display: none;
-            flex-direction: column;
-            gap: 28px;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .screen.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Hero Section --- */
-        .hero-section {
-            padding: 0 20px 24px 20px;
-            animation: fadeIn 1s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-poster {
-            width: 100%;
-            height: 240px;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            position: relative;
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .hero-poster img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: top;
-            filter: brightness(0.85) contrast(1.1);
-            transition: transform 0.5s ease;
-        }
-
-        .hero-poster:hover img {
-            transform: scale(1.05);
-        }
-
-        .hero-badge {
-            position: absolute;
-            bottom: 16px;
-            left: 16px;
-            background: rgba(8, 8, 8, 0.6);
-            backdrop-filter: blur(8px);
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
-            font-weight: 600;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .hero-text {
-            margin-top: 16px;
-            text-align: center;
-        }
-
-        .hero-text h2 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .hero-text p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        /* --- Order Summary Card --- */
-        .order-card {
-            background-color: var(--surface-color);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
-        }
-        
-        .order-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .thumbnail {
-            width: 70px;
-            height: 70px;
-            background-color: #222;
-            border-radius: var(--radius-md);
-            /* Placeholder for jersey using a gradient */
-            background: linear-gradient(135deg, #eee 0%, #ccc 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-            font-size: 24px;
-        }
-        
-        /* Apply subtle gold/white vibe for the jersey */
-        .thumbnail.premium {
-            background: linear-gradient(135deg, #FFFDF5 0%, #E8D5A0 100%);
-        }
-
-        .order-details {
-            flex-grow: 1;
-        }
-
-        .product-title {
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-
-        .product-meta {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-        }
-
-        .product-price {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        /* --- Express Checkout --- */
-        .express-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .btn-express {
-            flex: 1;
-            padding: 14px;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--border-color);
-            background-color: var(--surface-color);
-            color: var(--text-primary);
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: background-color 0.2s;
-        }
-
-        .btn-express:hover {
-            background-color: #222;
-        }
-        
-        .btn-apple {
-            background-color: #fff;
-            color: #000;
-            border: none;
-        }
-        .btn-apple:hover {
-            background-color: #f0f0f0;
-        }
-
-        /* --- Divider --- */
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .divider:not(:empty)::before { margin-right: 12px; }
-        .divider:not(:empty)::after { margin-left: 12px; }
-
-        /* --- Forms --- */
-        .form-section {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .section-title {
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .input-group {
-            position: relative;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 16px 16px 8px 16px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-color);
-            background-color: var(--surface-color);
-            color: var(--text-primary);
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .input-field:focus {
-            border-color: var(--primary-action);
-        }
-
-        .input-label {
-            position: absolute;
-            left: 16px;
-            top: 16px;
-            color: var(--text-secondary);
-            font-size: 1rem;
-            pointer-events: none;
-            transition: 0.2s ease all;
-        }
-
-        .input-field:focus ~ .input-label,
-        .input-field:not(:placeholder-shown) ~ .input-label {
-            top: 6px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .row {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* --- Footer Action --- */
-        .checkout-footer {
-            margin-top: auto;
-            padding: 0 20px 30px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 20px;
-            border-radius: var(--radius-full);
-            border: none;
-            background: linear-gradient(135deg, var(--primary-action) 0%, #1e422c 100%);
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.15rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 20px var(--accent-glow);
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px var(--accent-glow);
-            filter: brightness(1.1);
-        }
-        
-        .btn-primary:active {
-            transform: scale(0.97) translateY(0);
-        }
-
-        .trust-badges {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            align-items: center;
-        }
-        
-        /* --- Success Screen Specifics --- */
-        .success-hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 40px 0 20px 0;
-            gap: 20px;
-        }
-        
-        .success-icon-container {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background-color: rgba(42, 90, 59, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--primary-action);
-        }
-        
-        .success-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-        
-        .success-subtitle {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-        
-        .success-card {
-            background-color: var(--surface-color);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        .success-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.95rem;
-        }
-        
-        .success-row.total {
-            border-top: 1px solid var(--border-color);
-            padding-top: 16px;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        /* --- AI Assistant --- */
-        .ai-fab {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background-color: var(--primary-action);
-            border: 2px solid var(--border-color);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            z-index: 100;
-            transition: transform 0.2s, background-color 0.2s;
-        }
-
-        .ai-fab:hover {
-            transform: scale(1.05);
-            background-color: var(--primary-hover);
-        }
-
-        .ai-chat-window {
-            position: fixed;
-            bottom: 90px;
-            right: 24px;
-            width: 320px;
-            height: 480px;
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-            z-index: 99;
-            transform-origin: bottom right;
-            transition: opacity 0.3s, transform 0.3s;
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(0.95);
-        }
-
-        .ai-chat-window.open {
-            opacity: 1;
-            pointer-events: auto;
-            transform: scale(1);
-        }
-
-        .ai-header {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background-color: rgba(17, 17, 17, 0.5);
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        }
-
-        .ai-avatar {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--primary-action), #111);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: #fff;
-        }
-
-        .ai-header-info {
-            flex-grow: 1;
-        }
-
-        .ai-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .ai-status {
-            font-size: 0.75rem;
-            color: var(--primary-action);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .ai-status::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background-color: var(--primary-action);
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .ai-messages {
-            flex-grow: 1;
-            padding: 16px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        /* Custom scrollbar for chat */
-        .ai-messages::-webkit-scrollbar { width: 4px; }
-        .ai-messages::-webkit-scrollbar-track { background: transparent; }
-        .ai-messages::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-
-        .ai-msg {
-            max-width: 85%;
-            padding: 12px 14px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            animation: fadeInMsg 0.3s ease-out;
-        }
-
-        @keyframes fadeInMsg {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .ai-msg.system {
-            background-color: #222;
-            color: var(--text-primary);
-            border-radius: 12px 12px 12px 2px;
-            align-self: flex-start;
-            border: 1px solid var(--border-color);
-        }
-
-        .ai-msg.user {
-            background-color: var(--primary-action);
-            color: #fff;
-            border-radius: 12px 12px 2px 12px;
-            align-self: flex-end;
-        }
-        
-        .ai-suggestion-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 4px;
-        }
-        
-        .ai-chip {
-            background-color: transparent;
-            border: 1px solid var(--primary-action);
-            color: var(--text-primary);
-            padding: 6px 12px;
-            border-radius: 16px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .ai-chip:hover {
-            background-color: rgba(42, 90, 59, 0.2);
-        }
-
-        .ai-input-area {
-            padding: 16px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 8px;
-        }
-
-        .ai-input {
-            flex-grow: 1;
-            background-color: #111;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 10px 14px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            outline: none;
-        }
-
-        .ai-input:focus {
-            border-color: var(--primary-action);
-        }
-
-        .ai-send-btn {
-            background: none;
-            border: none;
-            color: var(--primary-action);
-            cursor: pointer;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-        }
-        
-        .ai-send-btn:hover {
-            transform: translateX(2px) scale(1.1);
-        }
-
-        /* Utility classes */
-        .hidden { display: none !important; }
+        body { font-family: 'Inter', sans-serif; background-color: #080808; color: #f5f5f5; -webkit-font-smoothing: antialiased; }
+        .glass { background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .screen { display: none; opacity: 0; transform: translateY(10px); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .screen.active { display: flex; opacity: 1; transform: translateY(0); }
+        .nav-item.active { color: #2a5a3b; }
+        .nav-item.active span { transform: translateY(-4px); font-variation-settings: 'FILL' 1; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .carousel-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; }
+        .carousel-item { flex: 0 0 100%; scroll-snap-align: start; }
     </style>
 </head>
-<body>
-
-    <div class="app-container">
+<body class="flex justify-center">
+    <div class="relative w-full max-w-md h-screen flex flex-col overflow-hidden bg-background-dark shadow-2xl">
         
         <!-- HEADER -->
-        <header id="app-header">
-            <button class="back-btn" id="back-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            </button>
-            <div class="logo">Maillot Pro</div>
-            <div class="secure-icon" id="header-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <header id="main-header" class="sticky top-0 z-50 flex items-center justify-between p-4 glass border-b border-white/5 h-16">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-3xl font-bold">sports_soccer</span>
+                <h1 class="text-lg font-bold tracking-tight">Maillot Pro</h1>
             </div>
+            <button onclick="navigate('profile')" class="size-10 rounded-full flex items-center justify-center bg-white/5 border border-white/10 overflow-hidden">
+                <span id="user-avatar-initial" class="material-symbols-outlined text-light-gray">account_circle</span>
+            </button>
         </header>
 
-        <main>
-            <!-- HERO SECTION -->
-            <div class="hero-section">
-                <div class="hero-poster">
-                    <img src="sadio_mane.png" alt="Sadio Mané - Maillot Pro Ambassador">
-                    <div class="hero-badge">⭐ Ambassador Performance</div>
-                </div>
-                <div class="hero-text">
-                    <h2>Équipez-vous comme Sadio</h2>
-                    <p>Le maillot conçu pour le focus extrême et la performance pure.</p>
-                </div>
-            </div>
-            <!-- CHECKOUT SCREEN -->
-            <div id="checkout-screen" class="screen active">
-                
-                <div class="order-card">
-                    <div class="thumbnail premium">👕</div>
-                    <div class="order-details">
-                        <div class="product-title">Maillot Elite Édition</div>
-                        <div class="product-meta">Size: Medium | Color: White/Gold</div>
-                        <div class="product-price">$120.00</div>
+        <main class="flex-1 overflow-y-auto pb-24 pt-4 px-4">
+            
+            <!-- HOME SCREEN -->
+            <section id="home-screen" class="screen active flex flex-col gap-6">
+                <div class="relative rounded-xl overflow-hidden aspect-[16/9] shadow-lg group">
+                    <img src="sadio_mane.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Sadio Mane">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-4">
+                        <p class="text-xs font-bold text-primary uppercase tracking-widest mb-1">Ambassadeur Élite</p>
+                        <h2 class="text-xl font-bold">Équipez-vous comme Sadio</h2>
+                        <p class="text-[10px] text-white/60">Performance pro & Confort extrême.</p>
                     </div>
                 </div>
 
-                <div class="express-buttons">
-                    <button class="btn-express btn-apple">
-                        <svg width="40" height="16" viewBox="0 0 40 16" fill="currentColor">
-                           <path d="M15.5 8c0-2 .8-3 2.5-4-1.2-1.5-3-1.6-3.8-1.6-1.5 0-3 .8-3.8 1.6-1 .8-1.8 2.5-1.8 4.5 0 2.2 1 4 2.2 5.5.8 1 2 2 3.2 2h.2c1 0 1.5-.5 2.8-.5 1 0 1.8.5 2.8.5h.2c1.2 0 2.2-1 3-2l.2-.2c-.8-.5-2-1.5-2-3.2v-2.6zm-1-6.5c-.8.8-1.2 2-1.2 3.2 1-.2 2.2-.8 3-1.8.8-1 1.2-2.2 1-3.5-1 .2-2 1-2.8 2.1z"/>
-                           <text x="22" y="12" font-family="Inter" font-weight="600" font-size="14">Pay</text>
-                        </svg>
+                <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                    <button onclick="filterShop('All')" class="px-5 py-2 rounded-full glass text-xs font-semibold whitespace-nowrap">Tous</button>
+                    <button onclick="filterShop('Premium')" class="px-5 py-2 rounded-full glass text-xs font-semibold whitespace-nowrap">Premium</button>
+                    <button onclick="filterShop('National')" class="px-5 py-2 rounded-full glass text-xs font-semibold whitespace-nowrap">National</button>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-sm mb-4">Populaires</h3>
+                    <div id="featured-list" class="grid grid-cols-2 gap-4"></div>
+                </div>
+            </section>
+
+            <!-- SHOP SCREEN -->
+            <section id="shop-screen" class="screen flex flex-col gap-6">
+                <div class="relative">
+                    <input oninput="handleSearch(this.value)" type="text" placeholder="Rechercher équipe, joueur..." class="w-full h-12 bg-surface-dark border border-white/5 rounded-xl px-12 text-sm outline-none">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-light-gray">search</span>
+                </div>
+                <div id="shop-list" class="grid grid-cols-2 gap-4"></div>
+            </section>
+
+            <!-- PRODUCT DETAIL SCREEN -->
+            <section id="detail-screen" class="screen flex flex-col gap-6">
+                <div class="relative rounded-2xl overflow-hidden glass p-2">
+                    <button onclick="navigate('shop')" class="absolute top-4 left-4 z-10 size-10 glass rounded-full flex items-center justify-center">
+                        <span class="material-symbols-outlined">close</span>
                     </button>
-                    <button class="btn-express">
-                        <svg width="42" height="16" viewBox="0 0 42 16" fill="currentColor">
-                            <text x="0" y="13" font-family="Inter" font-weight="600" font-size="14">G Pay</text>
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="divider">Or pay safely with card</div>
-
-                <div class="form-section">
-                    <div class="section-title">Shipping Information</div>
-                    <div class="input-group">
-                        <input type="email" id="email" class="input-field" placeholder=" ">
-                        <label for="email" class="input-label">Email Address</label>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" id="fullname" class="input-field" placeholder=" ">
-                        <label for="fullname" class="input-label">Full Name</label>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" id="address" class="input-field" placeholder=" ">
-                        <label for="address" class="input-label">Delivery Address</label>
+                    <div id="detail-carousel" class="carousel-container scrollbar-hide">
                     </div>
                 </div>
 
-                <div class="form-section">
-                    <div class="section-title">Payment Details</div>
-                    
-                    <!-- Senegal Local Payments -->
-                    <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-                        <button class="btn-express" style="border-color: #ffcc00; color: #ffcc00; font-size: 0.8rem; padding: 10px;" onclick="handleAiOption('Je veux payer avec Wave')">
-                            Wave
-                        </button>
-                        <button class="btn-express" style="border-color: #ff6600; color: #ff6600; font-size: 0.8rem; padding: 10px;" onclick="handleAiOption('Je veux payer avec Orange Money')">
-                            Orange Money
-                        </button>
-                    </div>
-
-                    <div class="input-group">
-                        <input type="text" id="cardnumber" class="input-field" placeholder=" ">
-                        <label for="cardnumber" class="input-label">Card Number</label>
-                    </div>
-                    <div class="row">
-                        <div class="input-group" style="flex: 1;">
-                            <input type="text" id="expiry" class="input-field" placeholder=" ">
-                            <label for="expiry" class="input-label">MM/YY</label>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h2 id="detail-name" class="text-2xl font-bold">Nom du Maillot</h2>
+                            <p id="detail-meta" class="text-xs text-light-gray">Équipe • Joueur</p>
                         </div>
-                        <div class="input-group" style="flex: 1;">
-                            <input type="text" id="cvc" class="input-field" placeholder=" ">
-                            <label for="cvc" class="input-label">CVC</label>
+                        <div id="detail-price" class="text-2xl font-bold text-primary">0 FCFA</div>
+                    </div>
+
+                    <div class="glass p-4 rounded-xl space-y-4">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-primary">Qualité & Détails</h3>
+                        <p id="detail-desc" class="text-sm leading-relaxed text-white/80">Description technique...</p>
+                        
+                        <div class="flex gap-4 pt-2">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-lg">verified</span>
+                                <span class="text-[10px] font-bold">100% Officiel</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-lg">air</span>
+                                <span class="text-[10px] font-bold">Ultra-Respirant</span>
+                            </div>
                         </div>
                     </div>
+
+                    <button id="add-to-cart-btn" class="w-full h-16 bg-primary text-white font-bold rounded-xl flex items-center justify-center gap-3 shadow-lg shadow-primary/20">
+                        <span>Ajouter au panier</span>
+                        <span class="material-symbols-outlined">add_shopping_cart</span>
+                    </button>
                 </div>
+            </section>
 
-            </div>
+            <!-- CART SCREEN -->
+            <section id="cart-screen" class="screen flex flex-col gap-6">
+                <h2 class="text-2xl font-bold mb-4">Votre Panier</h2>
+                <div id="cart-items" class="space-y-4">
+                    <!-- Cart items -->
+                </div>
+                <div id="cart-empty" class="hidden flex flex-col items-center justify-center py-12 text-light-gray">
+                    <span class="material-symbols-outlined text-6xl mb-4">shopping_basket</span>
+                    <p>Votre panier est vide</p>
+                </div>
+                <div id="cart-summary" class="mt-auto space-y-4">
+                    <div class="flex justify-between font-bold">
+                        <span>Total</span>
+                        <span id="cart-total" class="text-primary">0 FCFA</span>
+                    </div>
+                    <button onclick="window.location.href='checkout.html'" class="w-full h-16 bg-primary text-white font-bold rounded-xl flex items-center justify-center gap-3">
+                        <span>Commander maintenant</span>
+                        <span class="material-symbols-outlined">payments</span>
+                    </button>
+                </div>
+            </section>
 
-            <!-- SUCCESS SCREEN -->
-            <div id="success-screen" class="screen">
-                
-                <div class="success-hero">
-                    <div class="success-icon-container">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary-action)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <!-- PROFILE SCREEN -->
+            <section id="profile-screen" class="screen flex flex-col gap-8">
+                <div id="auth-container">
+                    <h2 class="text-2xl font-bold mb-6">Mon Compte</h2>
+                    <div class="space-y-4">
+                        <input id="login-email" type="email" placeholder="Email" class="w-full h-14 bg-surface-dark border border-white/5 rounded-xl px-4 text-sm outline-none">
+                        <button onclick="handleLogin()" class="w-full h-14 bg-primary text-white font-bold rounded-xl">Se connecter</button>
+                    </div>
+                </div>
+                <div id="user-dashboard" class="hidden flex flex-col gap-8">
+                    <div class="flex items-center gap-4 glass p-4 rounded-xl">
+                        <div class="size-14 rounded-full bg-primary flex items-center justify-center text-xl font-bold uppercase" id="dash-avatar">U</div>
+                        <div>
+                            <h3 class="font-bold" id="dash-name">Utilisateur</h3>
+                            <p class="text-xs text-light-gray" id="dash-email">email@example.com</p>
+                        </div>
                     </div>
                     <div>
-                        <h1 class="success-title">Order Confirmed</h1>
-                        <p class="success-subtitle">A receipt has been sent to your email.<br>Thank you for your purchase.</p>
+                        <h3 class="text-sm font-bold mb-4">Mes Commandes</h3>
+                        <div id="order-list" class="space-y-3"></div>
                     </div>
+                    <button onclick="handleLogout()" class="text-red-500 font-bold text-sm">Se déconnecter</button>
                 </div>
+            </section>
 
-                <div class="success-card">
-                    <div class="success-row">
-                        <span style="color: var(--text-secondary)">Order Number</span>
-                        <span style="font-weight: 500;">#MP-84920</span>
-                    </div>
-                    <div class="success-row">
-                        <span style="color: var(--text-secondary)">Date</span>
-                        <span style="font-weight: 500;" id="current-date">Mar 17, 2026</span>
-                    </div>
-                    <div class="success-row">
-                        <span style="color: var(--text-secondary)">Est. Delivery</span>
-                        <span style="font-weight: 500;">Mar 20 - Mar 22</span>
-                    </div>
-                    
-                    <div class="order-card" style="margin-top: 8px; border-color: rgba(255,255,255,0.1); background-color: rgba(255,255,255,0.02)">
-                        <div class="thumbnail premium" style="width: 50px; height: 50px; font-size: 16px;">👕</div>
-                        <div class="order-details">
-                            <div class="product-title" style="font-size: 0.9rem;">Maillot Elite Édition</div>
-                            <div class="product-meta" style="margin-bottom: 0;">Size: M</div>
-                        </div>
-                    </div>
-
-                    <div class="success-row total">
-                        <span>Total Paid</span>
-                        <span>$120.00</span>
-                    </div>
-                </div>
-
-            </div>
         </main>
 
-        <!-- FOOTER ACTIONS -->
-        <div class="checkout-footer" id="footer-actions">
-            <!-- Dynamic button injected by JS -->
-            <button class="btn-primary" id="main-action-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="btn-icon-lock"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                <span id="main-btn-text">Pay Now $120.00</span>
+        <!-- BOTTOM NAV -->
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass border-t border-white/5 h-20 px-6 flex items-center justify-between z-50">
+            <button onclick="navigate('home')" class="nav-item active flex flex-col items-center gap-1" id="nav-home">
+                <span class="material-symbols-outlined text-2xl">home</span>
+                <span class="text-[10px] font-medium">Accueil</span>
             </button>
-            <div class="trust-badges" id="trust-badges">
-                <span>🔒 Secure SSL</span>
-                <span>•</span>
-                <span>Visa</span>
-                <span>•</span>
-                <span>•</span>
-                <span>Mastercard</span>
-            </div>
-            
-            <!-- Monetization: WhatsApp Direct Order -->
-            <a href="https://wa.me/221773972689?text=Bonjour,%20je%20souhaite%20commander%20le%20Maillot%20Elite%20Édition" 
-               class="btn-secondary" 
-               style="text-decoration: none; margin-top: 8px; border: 1px solid #25D366; color: #25D366; background: transparent; width: 100%; padding: 14px; border-radius: var(--radius-full); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                Service Client WhatsApp
-            </a>
-            
-            <a href="tel:+221773972689" 
-               class="btn-secondary" 
-               style="text-decoration: none; margin-top: 8px; border: 1px solid var(--text-secondary); color: var(--text-secondary); background: transparent; width: 100%; padding: 14px; border-radius: var(--radius-full); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                Appeler le Service Client
-            </a>
-        </div>
-        
-        <!-- AI ASSISTANT -->
-        <button class="ai-fab" id="ai-fab">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="m8 10 3 3 6-6"/></svg>
-        </button>
-
-        <div class="ai-chat-window" id="ai-window">
-            <div class="ai-header">
-                <div class="ai-avatar">MP</div>
-                <div class="ai-header-info">
-                    <div class="ai-title">Maillot Pro Coach</div>
-                    <div class="ai-status">En ligne</div>
-                </div>
-                <button class="back-btn" id="close-ai" style="padding: 4px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                </button>
-            </div>
-            
-            <div class="ai-messages" id="ai-messages">
-                <div class="ai-msg system">
-                    Bonjour ! Je suis votre conseiller Maillot Pro. Êtes-vous sûr(e) de votre choix pour le Maillot Elite Édition (Blanc/Or) ?
-                    <div class="ai-suggestion-chips" id="initial-chips">
-                        <button class="ai-chip" onclick="handleAiOption('Oui, la taille M me va.')">Oui, la taille M me va.</button>
-                        <button class="ai-chip" onclick="handleAiOption('Comment taille ce maillot ?')">Comment taille ce maillot ?</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ai-input-area">
-                <input type="text" id="ai-input" class="ai-input" placeholder="Posez une question...">
-                <button class="ai-send-btn" id="ai-send">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </button>
-            </div>
-        </div>
-
+            <button onclick="navigate('shop')" class="nav-item flex flex-col items-center gap-1" id="nav-shop">
+                <span class="material-symbols-outlined text-2xl">search</span>
+                <span class="text-[10px] font-medium">Explorer</span>
+            </button>
+            <button onclick="navigate('cart')" class="nav-item flex flex-col items-center gap-1 relative" id="nav-cart">
+                <span class="material-symbols-outlined text-2xl">shopping_cart</span>
+                <span class="text-[10px] font-medium">Panier</span>
+                <div id="cart-count" class="hidden absolute top-0 -right-2 size-4 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-background-dark">0</div>
+            </button>
+            <button onclick="navigate('profile')" class="nav-item flex flex-col items-center gap-1" id="nav-profile">
+                <span class="material-symbols-outlined text-2xl">person</span>
+                <span class="text-[10px] font-medium">Compte</span>
+            </button>
+        </nav>
     </div>
 
+    <script src="store.js"></script>
     <script>
+        function navigate(screenId) {
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+                s.classList.add('hidden');
+            });
+            const target = document.getElementById(screenId + '-screen');
+            target.classList.remove('hidden');
+            setTimeout(() => target.classList.add('active'), 50);
+
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const nav = document.getElementById('nav-' + screenId);
+            if (nav) nav.classList.add('active');
+
+            if (screenId === 'profile') renderProfile();
+            if (screenId === 'cart') renderCart();
+        }
+
+        function formatCurrency(amount) {
+            return amount.toLocaleString() + ' ' + Store.config.currency;
+        }
+
+        function openDetail(id) {
+            const p = Store.products.find(x => x.id === id);
+            document.getElementById('detail-name').innerText = p.name;
+            document.getElementById('detail-meta').innerText = `${p.team} • ${p.player}`;
+            document.getElementById('detail-price').innerText = formatCurrency(p.price);
+            document.getElementById('detail-desc').innerText = p.details || "Qualité premium.";
+            
+            const carousel = document.getElementById('detail-carousel');
+            const gallery = p.gallery || [p.image];
+            carousel.innerHTML = gallery.map(img => `
+                <div class="carousel-item">
+                    <img src="${img}" class="w-full h-80 object-cover rounded-xl shadow-2xl">
+                </div>
+            `).join('');
+
+            const addBtn = document.getElementById('add-to-cart-btn');
+            addBtn.onclick = () => addToCart(p.id);
+            if (p.stock > 0) {
+                addBtn.innerHTML = '<span>Ajouter au panier</span><span class="material-symbols-outlined text-xl">add_shopping_cart</span>';
+                addBtn.disabled = false;
+                addBtn.className = "w-full h-16 bg-primary text-white font-bold rounded-xl flex items-center justify-center gap-3 shadow-lg shadow-primary/20";
+            } else {
+                addBtn.innerHTML = '<span>Produit Épuisé</span>';
+                addBtn.disabled = true;
+                addBtn.className = "w-full h-16 bg-white/5 text-light-gray font-bold rounded-xl flex items-center justify-center gap-3 border border-white/5 cursor-not-allowed";
+            }
+
+            navigate('detail');
+        }
+
+        function renderProducts(list, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = list.map(p => `
+                <div class="product-card glass rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all active:scale-95" onclick="openDetail('${p.id}')">
+                    <div class="relative aspect-[4/5]">
+                        <img src="${p.image}" class="w-full h-full object-cover">
+                        ${p.stock <= 0 ? '<div class="absolute inset-0 bg-black/60 flex items-center justify-center"><span class="text-[10px] font-bold px-2 py-1 bg-red-600 rounded">EPUISE</span></div>' : ''}
+                    </div>
+                    <div class="p-3">
+                        <h4 class="text-xs font-bold truncate">${p.name}</h4>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="font-bold text-sm text-primary">${formatCurrency(p.price)}</span>
+                            <span class="material-symbols-outlined text-xs text-light-gray">arrow_forward_ios</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCart() {
+            const itemsCont = document.getElementById('cart-items');
+            const summary = document.getElementById('cart-summary');
+            const empty = document.getElementById('cart-empty');
+            const item = Store.state.cart;
+
+            if (!item) {
+                itemsCont.innerHTML = '';
+                summary.classList.add('hidden');
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            summary.classList.remove('hidden');
+            itemsCont.innerHTML = `
+                <div class="glass p-4 rounded-xl flex gap-4">
+                    <img src="${item.image}" class="size-20 object-cover rounded-lg">
+                    <div class="flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-sm">${item.name}</h4>
+                            <p class="text-[10px] text-light-gray">${item.team}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-primary">${formatCurrency(item.price)}</span>
+                            <button onclick="clearCart()" class="material-symbols-outlined text-red-500 text-lg">delete</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('cart-total').innerText = formatCurrency(item.price);
+        }
+
+        function clearCart() {
+            Store.state.cart = null;
+            localStorage.removeItem('mp_cart');
+            updateCartUI();
+            renderCart();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-count');
+            if (Store.state.cart) {
+                badge.innerText = "1";
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function renderProfile() {
+            const user = Store.state.currentUser;
+            const auth = document.getElementById('auth-container');
+            const dash = document.getElementById('user-dashboard');
+
+            if (!user) {
+                auth.classList.remove('hidden');
+                dash.classList.add('hidden');
+            } else {
+                auth.classList.add('hidden');
+                dash.classList.remove('hidden');
+                document.getElementById('dash-name').innerText = user.name;
+                document.getElementById('dash-email').innerText = user.email;
+                document.getElementById('dash-avatar').innerText = user.name[0];
+                
+                const orders = Store.getOrderHistory();
+                document.getElementById('order-list').innerHTML = orders.length ? orders.map(o => `
+                    <div class="glass p-4 rounded-xl flex justify-between items-center">
+                        <div>
+                            <h5 class="text-xs font-bold">${o.id}</h5>
+                            <p class="text-[10px] text-light-gray">${o.date}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-primary">${formatCurrency(o.total)}</p>
+                            <p class="text-[9px] uppercase tracking-wider">${o.status}</p>
+                        </div>
+                    </div>
+                `).join('') : '<p class="text-[10px] text-light-gray italic">Aucune commande passée.</p>';
+            }
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            if (email) {
+                Store.login(email, 'pass');
+                renderProfile();
+            }
+        }
+
+        function handleLogout() {
+            Store.logout();
+            renderProfile();
+        }
+
+        function handleSearch(q) { renderProducts(Store.searchProducts(q), 'shop-list'); }
+        function filterShop(cat) { renderProducts(Store.filterProducts(cat), 'shop-list'); navigate('shop'); }
+
         document.addEventListener('DOMContentLoaded', () => {
-            const checkoutScreen = document.getElementById('checkout-screen');
-            const successScreen = document.getElementById('success-screen');
-            const mainActionBtn = document.getElementById('main-action-btn');
-            const mainBtnText = document.getElementById('main-btn-text');
-            const btnIconLock = document.getElementById('btn-icon-lock');
-            const trustBadges = document.getElementById('trust-badges');
-            const backBtn = document.getElementById('back-btn');
-            const headerIcon = document.getElementById('header-icon');
-            const dateEl = document.getElementById('current-date');
-            
-            // Set current date
-            const today = new Date();
-            dateEl.textContent = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
-            // State management
-            let currentView = 'checkout'; // 'checkout' or 'success'
-
-            function showSuccess() {
-                checkoutScreen.classList.remove('active');
-                successScreen.classList.add('active');
-                
-                // Update header
-                backBtn.style.visibility = 'hidden';
-                headerIcon.style.visibility = 'hidden';
-                
-                // Update Footer action
-                mainBtnText.textContent = 'Track Order';
-                btnIconLock.style.display = 'none';
-                trustBadges.style.display = 'none';
-                
-                currentView = 'success';
-                window.scrollTo(0,0);
-            }
-
-            function showCheckout() {
-                successScreen.classList.remove('active');
-                checkoutScreen.classList.add('active');
-                
-                // Update header
-                backBtn.style.visibility = 'visible';
-                headerIcon.style.visibility = 'visible';
-                
-                // Update Footer action
-                mainBtnText.textContent = 'Pay Now $120.00';
-                btnIconLock.style.display = 'block';
-                trustBadges.style.display = 'flex';
-                
-                currentView = 'checkout';
-            }
-
-            // Primary Button click
-            mainActionBtn.addEventListener('click', () => {
-                if(currentView === 'checkout') {
-                    // Simulate processing
-                    const originalText = mainBtnText.textContent;
-                    mainBtnText.textContent = 'Processing...';
-                    mainActionBtn.style.opacity = '0.8';
-                    mainActionBtn.style.pointerEvents = 'none';
-                    
-                    setTimeout(() => {
-                        mainActionBtn.style.opacity = '1';
-                        mainActionBtn.style.pointerEvents = 'auto';
-                        showSuccess();
-                    }, 1200);
-                } else {
-                    // Action on Success page (e.g., track order or continue shopping)
-                    alert("Tracking functionality coming soon!");
-                }
-            });
-
-            // Back button click
-            backBtn.addEventListener('click', () => {
-                if(currentView === 'checkout') {
-                    alert("Going back to cart!");
-                }
-            });
-            
-            // --- AI Assistant Logic ---
-            const aiFab = document.getElementById('ai-fab');
-            const aiWindow = document.getElementById('ai-window');
-            const closeAi = document.getElementById('close-ai');
-            const aiInput = document.getElementById('ai-input');
-            const aiSendBtn = document.getElementById('ai-send');
-            const aiMessages = document.getElementById('ai-messages');
-            
-            aiFab.addEventListener('click', () => {
-                aiWindow.classList.add('open');
-            });
-            
-            closeAi.addEventListener('click', () => {
-                aiWindow.classList.remove('open');
-            });
-            
-            function appendUserMessage(text) {
-                const msg = document.createElement('div');
-                msg.className = 'ai-msg user';
-                msg.textContent = text;
-                aiMessages.appendChild(msg);
-                scooldownToBottom();
-                
-                // Remove initial chips if they exist
-                const initialChips = document.getElementById('initial-chips');
-                if(initialChips) initialChips.remove();
-            }
-            
-            function appendSystemMessage(text, delay = 600) {
-                setTimeout(() => {
-                    const msg = document.createElement('div');
-                    msg.className = 'ai-msg system';
-                    msg.innerHTML = text; // Allow HTML for bolding/chips
-                    aiMessages.appendChild(msg);
-                    scooldownToBottom();
-                }, delay);
-            }
-            
-            function scooldownToBottom() {
-                aiMessages.scrollTop = aiMessages.scrollHeight;
-            }
-            
-            // Expose function globally for the inline onclick handlers
-            window.handleAiOption = function(text) {
-                appendUserMessage(text);
-                
-                if (text.includes('taille ce maillot')) {
-                    appendSystemMessage("Le Maillot Elite a une **coupe cintrée (Pro Fit)**. Si vous préférez être à l'aise, nous conseillons de prendre une taille au-dessus. Voulez-vous que je modifie la taille en **Large** pour vous ?<br><br><div class='ai-suggestion-chips'><button class='ai-chip' onclick='handleAiOption(\"Oui, passez en Large.\")'>Oui, passez en Large.</button></div>");
-                } else if (text.includes('Large')) {
-                    // Update UI to reflect Large
-                    document.querySelector('.product-meta').textContent = "Size: Large | Color: White/Gold";
-                    appendSystemMessage("C'est noté ! J'ai mis à jour votre panier avec la taille **Large**. Il ne vous reste plus qu'à finaliser le paiement sur l'écran principal. ⚽");
-                } else if (text.includes('payer') || text.includes('pay') || text.includes('moov') || text.includes('orange') || text.includes('wave')) {
-                    appendSystemMessage("Pour le Sénégal, vous pouvez payer par **Wave** ou **Orange Money**. <br><br>👉 Envoyez simplement le montant au **77 397 26 89**. <br><br>Une fois fait, envoyez-nous une capture sur WhatsApp via le bouton vert !");
-                } else if (text.includes('service client') || text.includes('besoin d\'aide') || text.includes('aider')) {
-                    appendSystemMessage("Je suis là pour vous ! Vous pouvez aussi parler directement à un humain au **77 397 26 89** ou via le bouton d'appel en bas de page.");
-                } else {
-                    appendSystemMessage("Parfait. Vos articles sont réservés. Besoin d'aide directe ? Appelez le **77 397 26 89** ou utilisez WhatsApp.");
-                }
-            };
-
-            function handleAiSubmit() {
-                const text = aiInput.value.trim();
-                if(!text) return;
-                
-                appendUserMessage(text);
-                aiInput.value = '';
-                
-                // Generic mock response
-                appendSystemMessage("Je suis là pour vous aider avec votre commande. Si vous avez un doute sur la matière ou la livraison, n'hésitez pas ! La livraison express est actuellement offerte.");
-            }
-            
-            aiSendBtn.addEventListener('click', handleAiSubmit);
-            aiInput.addEventListener('keypress', (e) => {
-                if(e.key === 'Enter') handleAiSubmit();
-            });
+            renderProducts(Store.products.slice(0, 2), 'featured-list');
+            renderProducts(Store.products, 'shop-list');
+            updateCartUI();
         });
     </script>
 </body>
